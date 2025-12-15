@@ -1,0 +1,27 @@
+int TMP = A0;
+int LED = 7;
+
+float voltage, temperature;
+
+void setup() {
+  pinMode(LED, OUTPUT);
+  
+Serial.begin(9600);
+  
+}
+
+void loop() {
+  voltage = analogRead(TMP) * (5.0 / 1023.0);
+  temperature = (voltage - 0.5) * 100;
+  
+  Serial.print("temperature = ");
+    Serial.println(temperature);
+
+  if (temperature >= 25) {
+    digitalWrite(LED, HIGH);
+  } else {
+    digitalWrite(LED, LOW);
+  }
+
+  delay(500);
+}
