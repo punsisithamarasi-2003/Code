@@ -1,0 +1,31 @@
+// ESP32 + PIR Sensor + LED Example
+
+// Pin Definitions
+const int ledPin = 2;      // Onboard LED (or external LED with resistor)
+const int pirPin = 15;     // PIR sensor output pin
+
+int pirState = LOW;        // Current PIR state
+
+void setup() {
+  Serial.begin(115200);    // Initialize serial monitor
+  pinMode(ledPin, OUTPUT); // Set LED as output
+  pinMode(pirPin, INPUT);  // Set PIR as input
+  Serial.println("PIR Sensor Test Started");
+}
+
+void loop() {
+  // Read PIR sensor state
+  pirState = digitalRead(pirPin);
+
+  if (pirState == HIGH) {
+    // Motion detected
+    digitalWrite(ledPin, HIGH);  // Turn LED on
+    Serial.println("Motion Detected!");
+  } else {
+    // No motion
+    digitalWrite(ledPin, LOW);   // Turn LED off
+    Serial.println("No Motion");
+  }
+
+  delay(200); // Small delay for PIR sensor stability
+}
