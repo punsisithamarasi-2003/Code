@@ -1,0 +1,49 @@
+#include <math.h>
+
+#define NTC_PIN 34
+#define LED_PIN 2
+
+#define SERIES_RESISTOR       10000.0
+#define NOMINAL_RESISTANCE    10000.0
+#define NOMINAL_TEMPERATURE   25.0
+#define BETA_COEFFICIENT      3950.0
+
+void setup() {
+  Serial.begin(9600);
+
+  analogReadResolution(12);
+  analogSetPinAttenuation(NTC_PIN, ADC_11db);
+
+  pinMode(LED_PIN, OUTPUT);
+}
+
+void loop() {
+  int adcValue = analogRead(NTC_PIN);
+
+  float voltage = adcValue * (3.3 / 4095.0);
+  if (voltage <= 0.01 || voltage >= 3.29) return;
+
+  // Wokwi NTC module formula
+  float resistance = SERIES_RESISTOR * (voltage / (3.3 - voltage));
+
+  float temperature;
+  temperature = resistance / NOMINAL_RESISTANCE;
+  temperature = log(temperature);
+  temperature /= BETA_COEFFICIENT;
+  temperature += 1.0 / (NOMINAL_TEMPERATURE + 273.15);
+  temperature = 1.0 / temperature;
+  temperature -= 273.15;
+
+  Serial.print("Temperature = ");
+  Serial.print(temperature);
+  Serial.println(" °C");
+
+  // LED control
+  if (temperature > 25.0) {
+    digitalWrite(LED_PIN, HIGH);
+  } else {
+    digitalWrite(LED_PIN, LOW);
+  }
+
+  delay(500);
+}
