@@ -1,0 +1,47 @@
+int marks;
+int category;
+
+void setup() {
+  Serial.begin(9600);
+  Serial.println("Enter student marks:");
+}
+
+void loop() {
+  if (Serial.available() > 0) {
+    marks = Serial.parseInt();
+
+    // Convert marks into category
+    if (marks >= 70)
+      category = 1;
+    else if (marks >= 50)
+      category = 2;
+    else if (marks >= 40)
+      category = 3;
+    else
+      category = 4;
+
+    // Switch case for output
+    switch (category) {
+      case 1:
+        Serial.println("Grade: D");
+        break;
+
+      case 2:
+        Serial.println("Grade: M");
+        break;
+
+      case 3:
+        Serial.println("Grade: P");
+        break;
+
+      case 4:
+        Serial.println("Grade: NA");
+        break;
+
+      default:
+        Serial.println("Invalid input");
+    }
+
+    Serial.println("\nEnter student marks:");
+  }
+}
